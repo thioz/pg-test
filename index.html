@@ -1,64 +1,81 @@
-<!doctype html>
+<!DOCTYPE HTML>
 <html>
-	<head>
-		<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
-		<title>Training App</title>
-		<link rel="stylesheet" href="assets/css/master.css" type="text/css" media="screen" />
+<head>
+	<title>PhoneGap</title>
+	<meta name="viewport" content="width=device-width; height=device-height; user-scalable=no" />
+	<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<link rel="stylesheet" href="assets/css/master.css" type="text/css" media="screen" />
+</head>
+<script type="text/javascript">
+  var gMap;
 
-		<script src="phonegap.js" type="text/javascript" charset="utf-8"></script>
+  function loader() 
+  {
+	
+    var state = document.readyState;
 
-		<script src="assets/js/xui.js" type="text/javascript" charset="utf-8"></script>
+    if (state == 'loaded' || state == 'complete') {
 
-		<script src="assets/js/lawnchair/adaptors/LawnchairAdaptorHelpers.js" type="text/javascript" charset="utf-8"></script>
+         run();
 
-		<script src="assets/js/lawnchair/adaptors/DOMStorageAdaptor.js" type="text/javascript" charset="utf-8"></script>
+    } else {
 
-		<script src="assets/js/lawnchair/adaptors/WebkitSQLiteAdaptor.js" type="text/javascript" charset="utf-8"></script>
+         if (navigator.userAgent.indexOf('Browzr') > -1) {
 
-		<script src="assets/js/lawnchair/Lawnchair.js" type="text/javascript" charset="utf-8"></script>
+              setTimeout(run, 250);
 
-		<script src="assets/js/dsl.js" type="text/javascript" charset="utf-8"></script>
+         } else {
 
-		<script src="assets/js/app.js" type="text/javascript" charset="utf-8"></script>
-		 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+              document.addEventListener('deviceready',run,false);
 
-	</head>
-	<body>
- 		<div id="title_bar">Histopedia test app</div>
+         }
 
-		<div id="welcome" class="view">
-		  <div class="app_button" id="map_button">Show My Location</div>
-  	   <div class="app_button" id="settings_button">Settings</div>
-		</div>
+    }
 
-		<div id="map" class="view">
-		  <div class="map_image">
-              <img id="static_map" src="assets/img/staticmap.png">
-		  </div>
-		  <p>This is what  happened at your location</p>
-		  <div class="app_button" id="welcome_button">Go Back</div>
-		</div>
+   }
 
-		<div id="settings" class="view">
-		  <form id="settings_form">
-		    <fieldset>
-		      <legend>Map Type</legend>
-			  <input type="radio" name="map" value="roadmap" checked>Road Map<br/>
-		      <input type="radio" name="map" value="satellite">Satellite<br/>
-		      <input type="radio" name="map" value="terrain">Terrain<br/>
-		      <input type="radio" name="map" value="hybrid">Hybrid<br/>
-		    </fieldset>
-		    <fieldset>
-		      <legend>Zoom Level</legend>
-  		      <input type="radio" name="zoom" value="10">Super Far<br/>
-  		      <input type="radio" name="zoom" value="12">Far<br/>
-  		      <input type="radio" name="zoom" value="15" checked>Normal<br/>
-  		      <input type="radio" name="zoom" value="18">Close<br/>
-  		      <input type="radio" name="zoom" value="20">Super Close<br/>
-  		     </fieldset>
-		      <button id="save_button">Save</button>
-	      </form>
-		</div>
+   function run() {
+        var win = function(position) { 
+             // Grab coordinates object from the Position object passed into success callback.
+             initMap(position);
+        };
+        var fail = function(e) {
+             alert('Can\'t retrieve position.\nError: ' + e);
+        };
+        navigator.geolocation.getCurrentPosition(win, fail);
+   }
+   
+   function initMap(position)
+   {
+   
+   	var coords = position.coords;
+   	
+   	document.getElementById("debug").innerHTML = "coords:" + coords.latitude + " x " + coords.longitude;
+   	
+	posCenter =  new google.maps.LatLng( coords.latitude,  coords.longitude);
+	var mapOptions = {
+		mapTypeId: google.maps.MapTypeId.SATELLITE,
+		center: posCenter,
+		zoom: 16
+	}
+	
+	gMap = new google.maps.Map(document.getElementById("mapview"), mapOptions);
+	
+	var m = new google.maps.Marker();
+	m.setPosition(posCenter);
+	m.setMap(gMap);
+	   	
+   } 
 
-	</body>
+</script>
+<body onload="loader();">
+<div id="map" class="view">
+  <div class="map_image" id="mapview">
+      <img id="static_map" src="assets/img/staticmap.png">
+  </div>
+</div>
+<div id="debug">debug info</div>
+
+</body>
 </html>
