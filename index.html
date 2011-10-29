@@ -1,62 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <title>Acceleration Example</title>
+	<head>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
+		<title>Training App</title>
+		<link rel="stylesheet" href="assets/css/master.css" type="text/css" media="screen" />
 
-    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
-    <script type="text/javascript" charset="utf-8">
+		<script src="phonegap.js" type="text/javascript" charset="utf-8"></script>
 
-    // The watch id references the current `watchAcceleration`
-    var watchID = null;
+		<script src="assets/js/xui.js" type="text/javascript" charset="utf-8"></script>
 
-    // Wait for PhoneGap to load
-    //
-    document.addEventListener("deviceready", onDeviceReady, false);
+		<script src="assets/js/lawnchair/adaptors/LawnchairAdaptorHelpers.js" type="text/javascript" charset="utf-8"></script>
 
-    // PhoneGap is ready
-    //
-    function onDeviceReady() {
-        startWatch();
-    }
+		<script src="assets/js/lawnchair/adaptors/DOMStorageAdaptor.js" type="text/javascript" charset="utf-8"></script>
 
-    // Start watching the acceleration
-    //
-    function startWatch() {
+		<script src="assets/js/lawnchair/adaptors/WebkitSQLiteAdaptor.js" type="text/javascript" charset="utf-8"></script>
 
-        // Update acceleration every 3 seconds
-        var options = { frequency: 3000 };
+		<script src="assets/js/lawnchair/Lawnchair.js" type="text/javascript" charset="utf-8"></script>
 
-        watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
-    }
+		<script src="assets/js/dsl.js" type="text/javascript" charset="utf-8"></script>
 
-    // Stop watching the acceleration
-    //
-    function stopWatch() {
-        if (watchID) {
-            navigator.accelerometer.clearWatch(watchID);
-            watchID = null;
-        }
-    }
+		<script src="assets/js/app.js" type="text/javascript" charset="utf-8"></script>
+		 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
-    // onSuccess: Get a snapshot of the current acceleration
-    //
-    function onSuccess(acceleration) {
-        var element = document.getElementById('accelerometer');
-        element.innerHTML = 'Acceleration X: ' + acceleration.x + '<br />' +
-                            'Acceleration Y: ' + acceleration.y + '<br />' +
-                            'Acceleration Z: ' + acceleration.z + '<br />' +
-                            'Timestamp: '      + acceleration.timestamp + '<br />';
-    }
+	</head>
+	<body>
+ 		<div id="title_bar">Histopedia test app</div>
 
-    // onError: Failed to get the acceleration
-    //
-    function onError() {
-        alert('onError!');
-    }
+		<div id="welcome" class="view">
+		  <div class="app_button" id="map_button">Show My Location</div>
+  	   <div class="app_button" id="settings_button">Settings</div>
+		</div>
 
-    </script>
-  </head>
-  <body>
-    <div id="accelerometer">Waiting for accelerometer...</div>
-  </body>
+		<div id="map" class="view">
+		  <div class="map_image">
+              <img id="static_map" src="assets/img/staticmap.png">
+		  </div>
+		  <p>This is what  happened at your location</p>
+		  <div class="app_button" id="welcome_button">Go Back</div>
+		</div>
+
+		<div id="settings" class="view">
+		  <form id="settings_form">
+		    <fieldset>
+		      <legend>Map Type</legend>
+			  <input type="radio" name="map" value="roadmap" checked>Road Map<br/>
+		      <input type="radio" name="map" value="satellite">Satellite<br/>
+		      <input type="radio" name="map" value="terrain">Terrain<br/>
+		      <input type="radio" name="map" value="hybrid">Hybrid<br/>
+		    </fieldset>
+		    <fieldset>
+		      <legend>Zoom Level</legend>
+  		      <input type="radio" name="zoom" value="10">Super Far<br/>
+  		      <input type="radio" name="zoom" value="12">Far<br/>
+  		      <input type="radio" name="zoom" value="15" checked>Normal<br/>
+  		      <input type="radio" name="zoom" value="18">Close<br/>
+  		      <input type="radio" name="zoom" value="20">Super Close<br/>
+  		     </fieldset>
+		      <button id="save_button">Save</button>
+	      </form>
+		</div>
+
+	</body>
 </html>
