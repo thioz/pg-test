@@ -59,13 +59,14 @@ function mapInit(position)
 	posCenter =  new google.maps.LatLng( position.coords.latitude ,position.coords.longitude );
 	var mapOptions = {
 		mapTypeId: google.maps.MapTypeId.SATELLITE,
-		center: posCenter
+		center: posCenter,
+		zoom: 13
 	}
 
 	gMap = new google.maps.Map(document.getElementById("map_image"), mapOptions);
 
 	var m = new google.maps.Marker();
-	m.setPosition(pnt);
-	gMap.addOverlay(m);
+	m.setPosition(m);
+	m.setMap(gMap);
 
 }
